@@ -1,17 +1,7 @@
 import {MongoClient, ObjectId} from 'mongodb';
+import Head from 'next/head';
 import MeetupDetails from '../../components/meetups/MeetupDetails';
 import {DB_URL} from '../../utils/mongo';
-
-function MeetupDetailsPage(props) {
-	return (
-		<MeetupDetails
-			image={props.meetupData.image}
-			title={props.meetupData.title}
-			address={props.meetupData.address}
-			description={props.meetupData.description}
-		/>
-	);
-}
 
 export async function getStaticPaths() {
 	const client = await MongoClient.connect(DB_URL);
@@ -59,4 +49,22 @@ export async function getStaticProps(context) {
 		},
 	};
 }
+
+function MeetupDetailsPage(props) {
+	return (
+		<>
+			<Head>
+				<title>{props.meetupData.title}</title>
+				<meta name="description" content={props.meetupData.description} />
+			</Head>
+			<MeetupDetails
+				image={props.meetupData.image}
+				title={props.meetupData.title}
+				address={props.meetupData.address}
+				description={props.meetupData.description}
+			/>
+		</>
+	);
+}
+
 export default MeetupDetailsPage;

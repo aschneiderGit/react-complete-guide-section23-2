@@ -1,4 +1,5 @@
 import {MongoClient} from 'mongodb';
+import Head from 'next/head';
 import {DB_URL} from '../utils/mongo';
 
 import {useEffect, useState} from 'react';
@@ -39,7 +40,15 @@ export async function getStaticProps() {
 // }
 
 function HomePage(props) {
-	return <MeetupList meetups={props.meetups} />;
+	return (
+		<>
+			<Head>
+				<title>React Meetups</title>
+				<meta name="description" content="Browse some Meetups informations" />
+			</Head>
+			<MeetupList meetups={props.meetups} />
+		</>
+	);
 }
 
 export default HomePage;
