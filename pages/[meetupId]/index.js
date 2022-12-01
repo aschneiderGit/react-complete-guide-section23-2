@@ -1,33 +1,35 @@
+import {MongoClient, ObjectId} from 'mongodb';
 import MeetupDetails from '../../components/meetups/MeetupDetails';
+import {DB_URL} from '../../utils/mongo';
 
-function MeetupDetailsPage() {
+function MeetupDetailsPage(props) {
 	return (
 		<MeetupDetails
-			image="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg"
-			title="First Meetup"
-			adress="Here"
-			description="description"
+			image={props.meetupData.image}
+			title={props.meetupData.title}
+			address={props.meetupData.address}
+			description={props.meetupData.description}
 		/>
 	);
 }
 
 export async function getStaticPaths() {
+	const client = await MongoClient.connect(DB_URL);
+	const db = client.db('nextJS');
+
+	const meetupsCollection = db.collection('meetups');
+
+	const meetups = await meetupsCollection.find({}, {_id: 1}).toArray();
+
+	client.close();
+
 	return {
 		//should be write programmatically
 		//fallback indicated if they are other path or not
 		fallback: false,
-		paths: [
-			{
-				params: {
-					meetupId: 'm1',
-				},
-			},
-			{
-				params: {
-					meetupId: 'm2',
-				},
-			},
-		],
+		paths: meetups.map((meetup) => ({
+			params: {meetupId: meetup._id.toString()},
+		})),
 	};
 }
 
@@ -36,18 +38,25 @@ export async function getStaticProps(context) {
 
 	const meetupId = context.params.meetupId;
 
+	const client = await MongoClient.connect(DB_URL);
+	const db = client.db('nextJS');
+
+	const meetupsCollection = db.collection('meetups');
+
+	const meetup = await meetupsCollection.findOne({_id: ObjectId(meetupId)});
+
+	client.close();
+
 	return {
 		props: {
 			meetupData: {
-				image:
-					'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg',
-				id: meetupId,
-				title: 'First Meetup',
-				address: 'Some Street 5, Some City',
-				description: 'This is a first meetup',
+				id: meetup._id.toString(),
+				image: meetup.image,
+				title: meetup.title,
+				address: meetup.address,
+				description: meetup.description,
 			},
 		},
 	};
 }
-
 export default MeetupDetailsPage;

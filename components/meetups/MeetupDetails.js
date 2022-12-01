@@ -5,7 +5,7 @@ function MeetupDetails(props) {
 		<section className={style.detail}>
 			<img src={props.image} alt={props.title} />
 			<h1> {props.title}</h1>
-			<address> {props.adress}</address>
+			<address> {props.address}</address>
 			<p> {props.description}</p>
 		</section>
 	);
