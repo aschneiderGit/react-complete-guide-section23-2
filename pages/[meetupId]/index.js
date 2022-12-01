@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 	return {
 		//should be write programmatically
 		//fallback indicated if they are other path or not
-		fallback: false,
+		fallback: 'blocking',
 		paths: meetups.map((meetup) => ({
 			params: {meetupId: meetup._id.toString()},
 		})),
