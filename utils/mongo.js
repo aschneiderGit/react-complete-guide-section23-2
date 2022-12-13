@@ -1,5 +1,5 @@
 const USERNAME = 'react-course';
-const PASSWORD = '***REMOVED***';
+const PASSWORD = process.env.MONGO_PWD;
 
 export const DB_URL =
 	'mongodb+srv://' +
