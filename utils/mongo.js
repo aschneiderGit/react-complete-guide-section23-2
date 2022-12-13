@@ -1,9 +1,9 @@
-***REMOVED***
-const PASSWORD = '***REMOVED***';
+const USERNAME = 'react-course';
+const PASSWORD = process.env.MONGO_PWD;
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+export const DB_URL =
+	'mongodb+srv://' +
+	USERNAME +
+	':' +
+	PASSWORD +
+	'@cluster0.hpxjkxe.mongodb.net/?retryWrites=true&w=majority';
